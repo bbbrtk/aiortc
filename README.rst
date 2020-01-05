@@ -42,15 +42,15 @@ to run flask server:
 
 running on: http://your_ip:5000/filter
 
-To check if flask server works properly, use run flask/client-flask.py or send JSON: 
+To check if flask server works properly, use run flask/client-flask.py or send JSON (see also flask/example.json): 
 
 .. code-block:: console
 
-    $ {
-    $ "image" : "image encoded in base64",
-    $ "benchmark" : "float 0-1",
-    $ "color" : "boolean"
-    $ }
+    {
+    "image" : "image encoded in base64",
+    "benchmark" : "float 0-1",
+    "color" : "boolean"
+    }
 
 
 

@@ -1,5 +1,6 @@
-Style transfer server
+Bsc Thesis - Style Transfer in Neural Network - Server
 ====================================
+Poznan University of Technology - Faculty of Computing
 
 Running
 -------

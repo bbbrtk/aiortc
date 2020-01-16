@@ -60,12 +60,15 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
-        print("--------- frame RECEIVED ----------")
+        # print("--------- frame RECEIVED ----------")
 
         if self.transform == "style":
-            print("--------- STYLE TRANSFER ----------")
+            # print("--------- STYLE TRANSFER ----------")
             im = frame.to_ndarray(format="bgr24")
+            print(im.shape)
             im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
+            print(im.shape)
+            print(type(im))
             t = s.stylize_frame(im).transpose(1,2,0)
             print(t.shape)
             new_frame = VideoFrame.from_ndarray(im, format="bgr24")

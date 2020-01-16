@@ -31,7 +31,7 @@ class VideoTransformTrack(MediaStreamTrack):
 
     kind = "video"
 
-    print("--------- kind: video ----------")
+    # print("--------- kind: video ----------")
 
     def __init__(self, request, track, transform):
         super().__init__()  # don't forget this!
@@ -52,33 +52,28 @@ class VideoTransformTrack(MediaStreamTrack):
         style = np.asarray(style.resize((576, 1024))).transpose(2,0,1)
         print("--------- image resized ----------")
 
-        s = StyleTransfer()
+        self.style_transfer = StyleTransfer()
         print("--------- StyleTransfer() ----------")
 
-        s.set_style(style, 1.0)
+        self.style_transfer.set_style(style, 1.0)
         print("--------- style set ----------")
 
     async def recv(self):
         frame = await self.track.recv()
-        # print("--------- frame RECEIVED ----------")
 
         if self.transform == "style":
-            # print("--------- STYLE TRANSFER ----------")
-            im = frame.to_ndarray(format="bgr24")
-            print(im.shape)
+            im = frame.to_ndarray(format="rgb24")
+            im = Image.fromarray(im, mode="RGB")
             im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
-            print(im.shape)
-            print(type(im))
-            t = s.stylize_frame(im).transpose(1,2,0)
-            print(t.shape)
-            new_frame = VideoFrame.from_ndarray(im, format="bgr24")
+            im_styled = self.style_transfer.stylize_frame(im).transpose(1,2,0)
+            new_frame = VideoFrame.from_ndarray(im_styled, format="rgb24")
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
 
         else:
             return frame
-
+            
 
 async def index(request):
     content = open(os.path.join(ROOT, "index.html"), "r").read()

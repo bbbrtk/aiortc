@@ -37,9 +37,9 @@ class VideoTransformTrack(MediaStreamTrack):
         self.request = request
 
         imgname = str(self.request.remote).replace('.','-')
-        filter_image = cv2.imread(f"images/{imgname}.jpg")
-        if not filter_image is None:
-            print(f"INFO.image: Filter Image: {imgname}.jpg with shape {filter_image.shape}")  
+        # filter_image = cv2.imread(f"images/{imgname}.jpg")
+        # if not filter_image is None:
+        #     print(f"INFO.image: Filter Image: {imgname}.jpg with shape {filter_image.shape}")  
 
 
         style = Image.open("images/{imgname}.jpg")

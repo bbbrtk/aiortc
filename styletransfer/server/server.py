@@ -5,6 +5,8 @@ import logging
 import os
 import ssl
 import uuid
+from PIL import Image
+import numpy as np 
 
 from aiohttp import web
 from av import VideoFrame
@@ -53,7 +55,6 @@ class VideoTransformTrack(MediaStreamTrack):
         s = StyleTransfer()
         print("--------- StyleTransfer() ----------")
 
-        print(im.shape, style.shape)
         s.set_style(style, 1.0)
         print("--------- style set ----------")
 
@@ -65,7 +66,7 @@ class VideoTransformTrack(MediaStreamTrack):
             im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
             t = s.stylize_frame(im).transpose(1,2,0)
             print(t.shape)
-            new_frame = VideoFrame.from_ndarray(t, format="bgr24")
+            new_frame = VideoFrame.from_ndarray(im, format="bgr24")
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame

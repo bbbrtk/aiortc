@@ -38,6 +38,8 @@ class VideoTransformTrack(MediaStreamTrack):
         self.track = track
         self.transform = transform
         self.request = request
+        self.skip = False
+        self.old_frame = None
         print("--------- init ----------")
 
         # imgname = str(self.request.remote).replace('.','-')
@@ -62,17 +64,20 @@ class VideoTransformTrack(MediaStreamTrack):
         frame = await self.track.recv()
 
         if self.transform == "style":
-            im = frame.to_ndarray(format="rgb24")
-            im = Image.fromarray(im, mode="RGB")
-            im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
-            im_styled = self.style_transfer.stylize_frame(im).transpose(1,2,0)
-            new_frame = VideoFrame.from_ndarray(im_styled, format="rgb24")
-            new_frame.pts = frame.pts
-            new_frame.time_base = frame.time_base
-            return new_frame
 
-        else:
-            return frame
+            if self.skip:
+                return self.old_frame
+            else:
+                im = frame.to_ndarray(format="rgb24")
+                im = Image.fromarray(im, mode="RGB")
+                im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
+                im_styled = self.style_transfer.stylize_frame(im).transpose(1,2,0)
+                new_frame = VideoFrame.from_ndarray(im_styled, format="rgb24")
+                new_frame.pts = frame.pts
+                new_frame.time_base = frame.time_base
+                self.old_frame = new_frame
+                return new_frame
+            self.skip = not self.skip
             
 
 async def index(request):

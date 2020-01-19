@@ -67,14 +67,11 @@ class VideoTransformTrack(MediaStreamTrack):
             self.skip += 1
 
             if self.skip%2==0:
-
+                # to speed up
                 im = frame.to_ndarray(format="rgb24")
-                im = im.resize((576, 1024))
-                im = im.transpose(2,0,1)
-
-                # im = Image.fromarray(im, mode="RGB")
-                # im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
-
+                im = Image.fromarray(im, mode="RGB")
+                im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
+                # 
                 im_styled = self.style_transfer.stylize_frame(im).transpose(1,2,0)
                 new_frame = VideoFrame.from_ndarray(im_styled, format="rgb24")
 

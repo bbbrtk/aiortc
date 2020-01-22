@@ -178,7 +178,6 @@ function start() {
         negotiate();
     }
 
-    document.getElementById('stop').style.display = 'inline-block';
 }
 
 function stop() {

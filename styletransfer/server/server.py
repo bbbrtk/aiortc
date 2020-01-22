@@ -40,13 +40,14 @@ class VideoTransformTrack(MediaStreamTrack):
         self.request = request
         print("--------- init ----------")
 
-        # imgname = str(self.request.remote).replace('.','-')
-        # style = Image.open("images/{imgname}.jpg")
-        # if not filter_image is None:
-        #     print(f"INFO.image: Filter Image: {imgname}.jpg with shape {filter_image.shape}")  
+        imgname = str(self.request.remote).replace('.','-')
+        style = Image.open(f"images/{imgname}.jpg")
+	
+        if not style is None:
+            print(f"INFO.image: Filter Image: {imgname}.jpg")  
 
         # remove later
-        style = Image.open("images/1.jpg")
+        # style = Image.open("images/1.jpg")
         print("--------- image loaded ----------")
 
         style = np.asarray(style.resize((576, 1024))).transpose(2,0,1)

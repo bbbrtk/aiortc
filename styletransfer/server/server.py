@@ -67,14 +67,17 @@ class VideoTransformTrack(MediaStreamTrack):
             im = Image.fromarray(im, mode="RGB")
             im = np.asarray(im.resize((576, 1024))).transpose(2,0,1)
             im_styled = self.style_transfer.stylize_frame(im).transpose(1,2,0)
-            new_frame = VideoFrame.from_ndarray(im_styled, format="rgb24")
+
+            # BGR to RGB
+            im_styled = im_styled[:, :, ::-1]
+            new_frame = VideoFrame.from_ndarray(im_styled, format="bgr24")
             new_frame.pts = frame.pts
             new_frame.time_base = frame.time_base
             return new_frame
 
         else:
             return frame
-            
+
 
 async def index(request):
     content = open(os.path.join(ROOT, "index.html"), "r").read()

@@ -15,7 +15,7 @@ from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder
 
 import sys
-sys.path.append("./../../../LinearStyleTransfer")
+sys.path.append("/")
 from StyleTransfer import StyleTransfer
 
 

@@ -40,15 +40,20 @@ class VideoTransformTrack(MediaStreamTrack):
         self.request = request
         print("--------- init ----------")
 
-        imgname = str(self.request.remote).replace('.','-')
-        style = Image.open(f"images/{imgname}.jpg")
+        client_name = str(self.request.remote).replace('.','-')
+        style = Image.open(f"images/{client_name}.jpg")
 	
         if not style is None:
-            print(f"INFO.image: Filter Image: {imgname}.jpg")  
+            print(f"INFO.image: Filter Image: {client_name}.jpg")  
 
-        # remove later
-        # style = Image.open("images/1.jpg")
         print("--------- image loaded ----------")
+
+        with open(f"txt/{client_name}.txt") as f:
+            lines = f.readlines()
+            scale = float(lines[0])
+            color_preservation = lines[1].lower() == "true"
+
+        print("--------- params loaded ----------")
 
         style = np.asarray(style.resize((576, 1024))).transpose(2,0,1)
         print("--------- image resized ----------")
@@ -56,7 +61,7 @@ class VideoTransformTrack(MediaStreamTrack):
         self.style_transfer = StyleTransfer()
         print("--------- StyleTransfer() ----------")
 
-        self.style_transfer.set_style(style, 1.0)
+        self.style_transfer.set_style(style, scale)
         print("--------- style set ----------")
 
     async def recv(self):

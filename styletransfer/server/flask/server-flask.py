@@ -20,7 +20,6 @@ def result():
         fh.write(base64.decodestring(img))
 
     with open(txt_name, "w") as fh2:
-        fh2.write(str(benchmark))
-        fh2.write(str(color))
+        fh2.write(f"{str(benchmark)}\n{str(color)}")
 
     return f"received and stored {img_name}" # response to request

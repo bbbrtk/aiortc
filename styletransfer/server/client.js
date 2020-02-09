@@ -157,7 +157,7 @@ function start() {
                 width: parseInt(resolution[0], 0),
                 height: parseInt(resolution[1], 0),
 		facingMode: 'environment',
-		frameRate:  6
+		frameRate: 9, 
             };
         } else {
             constraints.video = true;

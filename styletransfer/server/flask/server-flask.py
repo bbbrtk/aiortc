@@ -1,5 +1,6 @@
 from flask import Flask, request
 import base64
+import os
 
 app = Flask(__name__)
 @app.route('/filter', methods=['POST'])
@@ -9,12 +10,12 @@ def result():
     benchmark = request.form['benchmark']
     color = request.form['color']
 
-    print(color)
-    img_name = f"../images/{ip.replace('.','-')}.jpg"
-    txt_name = f"../txt/{ip.replace('.','-')}.txt"
+    server_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    img_name = os.path.join(server_dir, "images", f"{ip.replace('.','-')}.jpg")
+    txt_name = os.path.join(server_dir, "txt", f"{ip.replace('.','-')}.txt")
 
     print(f"{img_name} - {benchmark} - {color}")
-
+    
     with open(img_name, "wb") as fh:
         fh.write(base64.decodestring(img))
 

@@ -7,6 +7,7 @@ import ssl
 import uuid
 from PIL import Image
 import numpy as np 
+import skimage
 
 from aiohttp import web
 from av import VideoFrame
@@ -66,6 +67,10 @@ class VideoTransformTrack(MediaStreamTrack):
 
     async def recv(self):
         frame = await self.track.recv()
+		
+		if color_preservation:
+			frame_before = cv2.cvtColor(frame, cv2.COLOR_BGR2HLS)
+			frame_before = frame_before.transpose((2,0,1))
 
         if self.transform == "style":
             im = frame.to_ndarray(format="rgb24")
@@ -75,9 +80,16 @@ class VideoTransformTrack(MediaStreamTrack):
 
             # BGR to RGB
             im_styled = im_styled[:, :, ::-1]
+			if color_preservation:
+				frame_after = cv2.cvtColor(im_styled, cv2.COLOR_RGB2HLS)
+				frame_after = frame_after.transpose((2, 0, 1))
+				frame_after[1] = frame_before[1]
+				frame_after = frame_after.transpose((1,2,0))
+				frame_after = cv2.cvtColor(frame_after, cv2.COLOR_HLS2BGR)
+				im_styled = frame_after
             new_frame = VideoFrame.from_ndarray(im_styled, format="bgr24")
             new_frame.pts = frame.pts
-            new_frame.time_base = frame.time_base
+            new_frame.time_base = frame.time_base	
             return new_frame
 
         else:

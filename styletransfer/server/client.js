@@ -16,7 +16,15 @@ function createPeerConnection() {
     };
 
     if (document.getElementById('use-stun').checked) {
-        config.iceServers = [{urls: ['stun:stun.l.google.com:19302']}];
+        config.iceServers = [
+            {urls: ['stun:stun.l.google.com:19302']},
+            {
+	  	    urls: ['turn:styletransfer.northeurope.cloudapp.azure.com:3478?transport=udp'],
+        	    username: "johnny",
+        	    credential: "case",
+            },
+
+        ];
     }
 
     pc = new RTCPeerConnection(config);
